@@ -1,22 +1,25 @@
 package com.kaioferreira.workshopmongo.resource;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kaioferreira.workshopmongo.domain.User;
+import com.kaioferreira.workshopmongo.service.UserService;
 
 @RestController
 @RequestMapping(value = "/users") //mapeamento endpoint
 public class UserResource {
 
-	//definido qual o tipo do metodo
+	//injetando servico do User
+	@Autowired
+	private UserService userService;
+	
+	/* //definido qual o tipo do metodo
 	@RequestMapping(method = RequestMethod.GET) // ou @GetMapping
 	//public List<User> findAll(){ //metodo pegando uma lista
 	public ResponseEntity<List<User>> findAll() {
@@ -29,4 +32,12 @@ public class UserResource {
 		//return list;
 		return ResponseEntity.ok().body(list);
 	}
-}
+	*/
+	@RequestMapping(method = RequestMethod.GET) // ou @GetMapping
+	//public List<User> findAll(){ //metodo pegando uma lista
+	public ResponseEntity<List<User>> findAll() {
+		List<User> list = userService.findAll();
+		//return list com dados buscados;
+		return ResponseEntity.ok().body(list);
+	}
+} 
