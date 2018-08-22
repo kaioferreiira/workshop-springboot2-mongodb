@@ -1,6 +1,7 @@
 package com.kaioferreira.workshopmongo.resource;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kaioferreira.workshopmongo.domain.User;
+import com.kaioferreira.workshopmongo.dto.UserDTO;
 import com.kaioferreira.workshopmongo.service.UserService;
 
 @RestController
@@ -33,6 +35,8 @@ public class UserResource {
 		return ResponseEntity.ok().body(list);
 	}
 	*/
+	
+	/* metodos para encontrar todos com o ReponseEntity
 	@RequestMapping(method = RequestMethod.GET) // ou @GetMapping
 	//public List<User> findAll(){ //metodo pegando uma lista
 	public ResponseEntity<List<User>> findAll() {
@@ -40,4 +44,19 @@ public class UserResource {
 		//return list com dados buscados;
 		return ResponseEntity.ok().body(list);
 	}
+	*/
+	
+	///metodos para encontrar todos com o ReponseEntity com o DTO
+	@RequestMapping(method = RequestMethod.GET) // ou @GetMapping
+	//public List<User> findAll(){ //metodo pegando uma lista
+	public ResponseEntity<List<UserDTO>> findAll() {
+		List<User> list = userService.findAll();
+		//converto os elementos da lista para DTO. Lista orignal,Stream é uma coleção do java8 e 
+		//o Map pega cada ob x e retorna um new dto e coleta toda lista.
+		
+		List<UserDTO> listDto = list.stream().map(x -> new UserDTO(x)).collect(Collectors.toList());
+		//return list com dados buscados;
+		return ResponseEntity.ok().body(listDto);
+	}
+	
 } 
