@@ -86,6 +86,16 @@ public class UserResource {
 		return ResponseEntity.noContent().build(); //no contente é uma resposta com  204, que é um metodo sem resposta.
 	}
 
+	//implementar O resouce para atualizar
+	@PutMapping(value = "/{id}") //@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public ResponseEntity <Void> update(@RequestBody UserDTO objDto, @PathVariable String id){
+		User obj = userService.fromDTO(objDto);
+		obj.setId(id);
+		obj = userService.update(obj);
+		//retorna 201, onde se cria um novo recurso,
+		return ResponseEntity.noContent().build();
+	}
+
 
 
 

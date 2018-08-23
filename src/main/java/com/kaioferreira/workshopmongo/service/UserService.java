@@ -34,16 +34,27 @@ public class UserService {
 	public User insert(User obj){
 		return repositorioUser.insert(obj);
 	}
-
-	public User fromDTO(UserDTO objDto){
-		return new User(objDto.getId(),objDto.getName(), objDto.getEmail());
-	}
-
 	//metodo para deletar pegando um id
 	public void delete(String id){
 		//usa o metodo findById, senão encontrar retorna o throw.
 		findById(id);
 		repositorioUser.deleteById(id);
 	}
+	//metodo para realizar o UPDATE
+	public User update(User obj) {
+		User newObj = findById(obj.getId());
+		//metodo para copiar os dados do obj para o newObj
+		updateData(newObj, obj);
+		return repositorioUser.save(newObj);
+	}
 
+	// copiar os dador do obj para o newObj, id não muda
+	private void updateData(User newObj, User obj){
+		newObj.setName(obj.getName());
+		newObj.setEmail(obj.getEmail());
+	}
+
+	public User fromDTO(UserDTO objDto){
+		return new User(objDto.getId(),objDto.getName(), objDto.getEmail());
+	}
 }
