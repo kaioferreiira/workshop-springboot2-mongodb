@@ -3,6 +3,7 @@ package com.kaioferreira.workshopmongo.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.kaioferreira.workshopmongo.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,4 +29,21 @@ public class UserService {
 		// lançar aqui a exception personalizada
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
 	}
+
+	//criando metodo para inserir
+	public User insert(User obj){
+		return repositorioUser.insert(obj);
+	}
+
+	public User fromDTO(UserDTO objDto){
+		return new User(objDto.getId(),objDto.getName(), objDto.getEmail());
+	}
+
+	//metodo para deletar pegando um id
+	public void delete(String id){
+		//usa o metodo findById, senão encontrar retorna o throw.
+		findById(id);
+		repositorioUser.deleteById(id);
+	}
+
 }

@@ -1,19 +1,18 @@
 package com.kaioferreira.workshopmongo.resource;
 
 import java.io.Serializable;
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.kaioferreira.workshopmongo.domain.User;
 import com.kaioferreira.workshopmongo.dto.UserDTO;
 import com.kaioferreira.workshopmongo.service.UserService;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping(value = "/users") // mapeamento endpoint
@@ -68,5 +67,26 @@ public class UserResource {
 		User userObj = userService.findById(id);
 		return ResponseEntity.ok().body(new UserDTO(userObj));
 	}
+
+	//metodo para inserir um usuario
+	@PostMapping //@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity <Void> insert(@RequestBody UserDTO objDto){
+		User obj = userService.fromDTO(objDto);
+		obj = userService.insert(obj);
+		//retorna um cabeçalho com uma url do novo recurso criado
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+		//retorna 201, onde se cria um novo recurso,
+		return ResponseEntity.created(uri).build();
+	}
+
+	/// metodos para encontrar o objeto pelo id e excluir
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE) // ou @DeleteMapping
+	public ResponseEntity<Void> delete(@PathVariable String id) {
+		userService.delete(id);
+		return ResponseEntity.noContent().build(); //no contente é uma resposta com  204, que é um metodo sem resposta.
+	}
+
+
+
 
 }
